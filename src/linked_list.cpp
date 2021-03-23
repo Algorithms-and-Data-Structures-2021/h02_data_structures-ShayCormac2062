@@ -125,7 +125,6 @@ Node *LinkedList::find_node(int index) const {
       if (counter == index) return current_node;
       counter++;
   }
-  return {};
 }
 
 // РЕАЛИЗОВАНО

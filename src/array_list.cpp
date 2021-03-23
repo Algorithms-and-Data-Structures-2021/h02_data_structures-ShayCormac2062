@@ -18,7 +18,7 @@ ArrayList::ArrayList(int capacity) : capacity_{capacity} {
   size_ = 0;
   capacity_ = capacity;
   data_ = new Element[capacity_];
-  std::fill(data_[0], data_[capacity_], Element::UNINITIALIZED);
+  std::fill(data_, data_ + capacity_, Element::UNINITIALIZED);
 }
 
 ArrayList::~ArrayList() {
@@ -38,7 +38,7 @@ void ArrayList::Add(Element e) {
 
   assert(size_ < capacity_);  // я здесь, чтобы не дать тебе сойти с правильного пути
   data_[size_] = e;
-  size_++;
+  ++size_;
   // напишите свой код после расширения емкости массива здесь ...
 }
 
@@ -49,7 +49,7 @@ void ArrayList::Insert(int index, Element e) {
   }
   // Tip 1: используйте метод resize(new_capacity) для расширения емкости массива
   // напишите свой код здесь ...
-  if (size_ == capacity_) {
+  if (size_ >= capacity_) {
       resize(capacity_ + kCapacityGrowthCoefficient);
   }
 
@@ -76,9 +76,7 @@ Element ArrayList::Remove(int index) {
   // Tip 2: не забудьте задать значение Element::UNINITIALIZED освободившейся ячейке
   // напишите свой код здесь ...
     Element result = data_[index];
-    for (int i = index; i < size_; i++) {
-        data_[i] = data_[i + 1];
-    }
+    for (int i = index; i < size_; i++) data_[i] = data_[i + 1];
     data_[size_] = Element::UNINITIALIZED;
     --size_;
     return result;
@@ -87,29 +85,21 @@ Element ArrayList::Remove(int index) {
     void ArrayList::Clear() {
   // Tip 1: можете использовать std::fill для заполнения ячеек массива значением  Element::UNINITIALIZED
   // напишите свой код здесь ...
-    std::fill(data_[0], data_[capacity_], Element::UNINITIALIZED);
+    std::fill(data_, data_ + capacity_, Element::UNINITIALIZED);
     size_ = 0;
 }
 
 Element ArrayList::Get(int index) const {
   internal::check_out_of_range(index, 0, size_);
   // напишите свой код здесь ...
-  if (size_ >= index) {
-      Element result = data_[index];
-      return result;
-  }
-  else throw std::invalid_argument("No such element");
+  Element result = data_[index];
+  return result;
 }
 
 int ArrayList::IndexOf(Element e) const {
-    int result = kNotFoundElementIndex;
   for (int i = 0; i < size_; i++) {
-      if (data_[i] == e) {
-          result = i;
-          break;
-      }
+      if (data_[i] == e) return i;
   }
-  return result;
 }
 
 // === РЕАЛИЗОВАНО ===
